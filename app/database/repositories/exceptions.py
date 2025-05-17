@@ -3,3 +3,6 @@ class UserError(Exception):
 
 class HabitError(Exception):
     pass
+
+class HabitLogError(Exception):
+    pass

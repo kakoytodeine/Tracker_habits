@@ -37,3 +37,24 @@ class HabitRepository:
             logger.error(f'Database error while getting habits by user_id: {e}')
             raise HabitError('Database error while getting habits by user_id')
 
+    def delete_habit(self, habit_id: int) -> bool:
+        try:
+            habit = self.session.query(Habit).filter(Habit.id == habit_id).first()
+            if habit:
+                self.session.delete(habit)
+                self.session.commit()
+                return True
+        except SQLAlchemyError as e:
+            self.session.rollback()
+            logger.error(f'Database error while deleting habit: {e}')
+            raise HabitError('Database error while deleting habit')
+
+
+    def get_habit_by_id(self, habit_id: int) -> Habit | None:
+        try:
+            habit = self.session.query(Habit).filter(Habit.id == habit_id).first()
+            return habit
+        except SQLAlchemyError as e:
+            self.session.rollback()
+            logger.error(f'Database error while getting habit by id: {e}')
+            raise HabitError('Database error while getting habit by id')
