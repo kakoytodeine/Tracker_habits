@@ -3,7 +3,7 @@ from datetime import datetime
 
 from sqlalchemy.orm import Session
 from app.database.models import Habit
-from app.database.repositoryes.exceptions import HabitError
+from app.database.repositories.exceptions import HabitError
 from sqlalchemy.exc import SQLAlchemyError
 
 logger = logging.getLogger(__name__)

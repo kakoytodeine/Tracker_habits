@@ -3,7 +3,7 @@ import logging
 from datetime import date
 from sqlalchemy.orm import Session
 from app.database.models import HabitLog
-from app.database.repositoryes.exceptions import HabitLogError
+from app.database.repositories.exceptions import HabitLogError
 from sqlalchemy.exc import SQLAlchemyError
 
 logger = logging.getLogger(__name__)
@@ -54,7 +54,7 @@ class HabitLogRepository:
     def delete_log(self, habit_id: int, date_log: date) -> bool:
         try:
             log = self.session.query(HabitLog).filter(HabitLog.habit_id == habit_id,
-                                                      Habitlog.date_log == date_log).filter()
+                                                      HabitLog.date_log == date_log).filter()
             if log:
                 self.session.delete(log)
                 self.session.commit()
@@ -75,7 +75,8 @@ class HabitLogRepository:
 
     def get_logs_by_period(self, habit_id: int, start_date: date, end_date: date) -> list[HabitLog]:
         try:
-            logs = self.session.query(HabitLog).filter(HabitLog.habit_id == habit_id).filter(HabitLog.date_log.between(start_date, end_date)).all()
+            logs = self.session.query(HabitLog).filter(HabitLog.habit_id == habit_id).filter(
+                HabitLog.date_log.between(start_date, end_date)).all()
             return logs
         except SQLAlchemyError as e:
             self.session.rollback()

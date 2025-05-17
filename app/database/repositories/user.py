@@ -3,7 +3,7 @@ import logging
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 from app.database.models import User
-from app.database.repositoryes.exceptions import UserError
+from app.database.repositories.exceptions import UserError
 
 logger = logging.getLogger(__name__)
 

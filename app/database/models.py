@@ -21,15 +21,15 @@ class Habit(Base):
     date_start = Column(DateTime, nullable=False, comment='Date start')
 
     user = relationship('User', back_populates='habits')
-    checkins = relationship('Checkin', back_populates='habit')
+    logs = relationship('HabitLog', back_populates='habit', cascade='all, delete-orphan')
 
 
-class Checkin(Base):
-    __tablename__ = 'checkins'
+class HabitLog(Base):
+    __tablename__ = 'habitlogs'
     id = Column(Integer, primary_key=True, autoincrement=True, comment='ID Checkin')
     habit_id = Column(ForeignKey('habits.id'), nullable=False, comment='ID Habit')
-    date_checkin = Column(DateTime, nullable=False, comment='Date checkin')
+    date_log = Column(DateTime, nullable=False, comment='Date checkin')
     done = Column(Boolean, nullable=False, comment='Done checkin')
 
-    habit = relationship('Habit', back_populates='checkins')
+    habit = relationship('Habit', back_populates='logs')
 
