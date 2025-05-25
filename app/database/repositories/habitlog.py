@@ -64,7 +64,7 @@ class HabitLogRepository:
             logger.error(f'Database error while deleting log: {e}')
             raise HabitLogError('Database error while deleting log')
 
-    def get_habits_by_log(self, habit_id: int) -> list[HabitLog]:
+    def get_logs_by_habit(self, habit_id: int) -> list[HabitLog]:
         try:
             logs = self.session.query(HabitLog).filter(HabitLog.habit_id == habit_id).all()
             return logs
@@ -91,3 +91,16 @@ class HabitLogRepository:
             self.session.rollback()
             logger.error(f'Database error while counting logs by habit_id: {e}')
             raise HabitLogError('Database error while counting logs by habit_id')
+
+    def mark_log_as_done(self, habit_id: int, date_log: date) -> bool:
+        try:
+            log = self.session.query(HabitLog).filter(HabitLog.habit_id == habit_id,
+                                                      HabitLog.date_log == date_log).first()
+            if log:
+                log.done = True
+                self.session.commit()
+                return True
+        except SQLAlchemyError as e:
+            self.session.rollback()
+            logger.error(f'Database error while marking log as done: {e}')
+            raise HabitLogError('Database error while marking log as done')

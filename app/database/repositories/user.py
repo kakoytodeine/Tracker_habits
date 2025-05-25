@@ -54,6 +54,24 @@ class UserRepository:
             raise UserError('Database error while getting user by tg_id')
 
 
+    def get_all(self):
+        try:
+            users =  self.session.query(User).all()
+            return users
+        except SQLAlchemyError as e:
+            self.session.rollback()
+            logger.error(f'Database error while getting all users: {e}')
+            raise UserError(' Database error while getting all users')
+
+
+    def get_user_by_id(self, user_id: int) -> User:
+        try:
+            user = self.session.query(User).filter(User.id == user_id).first()
+            return user
+        except SQLAlchemyError as e:
+            self.session.rollback()
+            logger.error(f'Database error while getting user by user.id: {e}')
+            raise UserError('Database error while getting user by user.id')
 
 
 

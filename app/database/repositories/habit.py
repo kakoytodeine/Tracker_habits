@@ -58,3 +58,16 @@ class HabitRepository:
             self.session.rollback()
             logger.error(f'Database error while getting habit by id: {e}')
             raise HabitError('Database error while getting habit by id')
+
+    def habit_update(self, habit_id: int, name_habit: str, date_start: datetime) -> bool:
+        try:
+            habit = self.get_habit_by_id(habit_id=habit_id)
+            if habit:
+                habit.name_habit = name_habit
+                habit.date_start = date_start
+                self.session.commit()
+                return True
+        except SQLAlchemyError as e:
+            self.session.rollback()
+            logger.error(f'Database error while updating habit: {e}')
+            raise HabitError('Database error while updating habit')
